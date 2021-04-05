@@ -1,0 +1,81 @@
+<html>
+	
+	<head>
+
+		<meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
+		
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   		crossorigin=""/>
+		
+		<!-- Make sure you put this AFTER Leaflet's CSS -->
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin="">
+                </script>
+	
+	</head>
+	
+	<body>
+ 		<div id="mapid"></div>
+		
+		<style>
+			#mapid { height: 968px; }
+		</style>
+		
+		<script>
+
+			var mymap = L.map('mapid').setView([51.31667, 9.5], 7);
+			
+			L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='
+				+'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+				maxZoom: 18,
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">'
+					+'OpenStreetMap</a> contributors, ' +
+					'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				id: 'mapbox/streets-v11',
+				tileSize: 512,
+				zoomOffset: -1
+			}).addTo(mymap);
+
+			var LeafIcon = L.Icon.extend({
+				options: {
+				shadowUrl: 'leaf-shadow.png',
+				iconSize:     [38, 95],
+				shadowSize:   [50, 64],
+				iconAnchor:   [22, 94],
+				shadowAnchor: [4, 62],
+				popupAnchor:  [-3, -76]
+				}
+			});
+
+			var greenIcon = new LeafIcon({iconUrl: 'leaf-green.png'}),
+    			redIcon = new LeafIcon({iconUrl: 'leaf-red.png'}),
+			yellowIcon = new LeafIcon({iconUrl: 'leaf-orange.png'});
+
+                        // get JSON location data from database
+			var ajax = new XMLHttpRequest();
+                        ajax.open("GET", "data.php", true);
+			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			ajax.overrideMimeType("application/json; charset=UTF-8");
+                        ajax.send();
+			
+                        ajax.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                        var data = JSON.parse( this.responseText );
+
+	                        	for (let i of data) {
+        	                        	console.log(i);
+						var marker = L.marker([i.lat, i.lon], {icon: eval(i.color+"Icon")})
+							.addTo(mymap);
+						marker.bindPopup("<b>"+i.name+"</b><br><br>Article text<br><a href='https://"
+							+i.link+"'>"+i.link+"</a>");
+					}
+				}
+                        }
+
+		</script>
+	
+	</body>
+
+</html>
