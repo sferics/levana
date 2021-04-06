@@ -16,7 +16,7 @@ function console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-$conn = mysqli_connect("localhost", "ssz", "im#one<3", "ssz");
+$conn = mysqli_connect("localhost", "ssz", "save2destination", "ssz");
 mysqli_set_charset($conn, "utf8");
 
 $result = mysqli_query($conn, "SELECT * FROM gps");
