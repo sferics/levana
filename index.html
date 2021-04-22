@@ -26,9 +26,10 @@
 		<script>
 
 			var mymap = L.map('mapid').setView([51.31667, 9.5], 7);
+			var token = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 			
 			L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='
-				+'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+				+ token, {
 				maxZoom: 18,
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">'
 					+'OpenStreetMap</a> contributors, ' +
@@ -49,9 +50,9 @@
 				}
 			});
 
-			var greenIcon = new LeafIcon({iconUrl: 'leaf-green.png'}),
-    			redIcon = new LeafIcon({iconUrl: 'leaf-red.png'}),
-			yellowIcon = new LeafIcon({iconUrl: 'leaf-orange.png'});
+			var greenIcon	= new LeafIcon({iconUrl: 'leaf-green.png'}),
+    			    redIcon 	= new LeafIcon({iconUrl: 'leaf-red.png'}),
+			    yellowIcon	= new LeafIcon({iconUrl: 'leaf-orange.png'});
 
                         // get JSON location data from database
 			var ajax = new XMLHttpRequest();
@@ -68,8 +69,8 @@
         	                        	console.log(i);
 						var marker = L.marker([i.lat, i.lon], {icon: eval(i.color+"Icon")})
 							.addTo(mymap);
-						marker.bindPopup("<b>"+i.name+"</b><br><br>Article text<br><a href='https://"
-							+i.link+"'>"+i.link+"</a>");
+						marker.bindPopup("<h3><b>"+i.name+"</b></h3><br><a href='https://"
+							+i.link+"'>"+i.link+"</a><br><br>"+i.text, { maxWidth: 400 });
 					}
 				}
                         }
